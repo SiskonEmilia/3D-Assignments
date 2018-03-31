@@ -92,7 +92,7 @@
           charactercontroller = this.GetComponent<CharacterController> ();
           speed = new Vector3 (2, 5, 0);
         }
-        
+
         // Update is called once per frame
         void Update () {
           speed -= 3.0F * Time.deltaTime * Vector3.up;
@@ -102,3 +102,75 @@
       ```
 
 - 写一个程序，实现一个完整的太阳系， 其他星球围绕太阳的转速必须不一样，且不在一个法平面上。
+
+  既然要做太阳系，为了较为真实，自然要用到太阳系的数据～
+
+  |星球名|半径(公里)|轨道半径(千万公里)|自转周期(天)|公转周期(天)
+  |-|-|-|-|-|
+  |太阳 Sun|696000|0|26.9|0
+  |水星 Mercury|2439|57.9|58.65|87.70
+  |金星 Venus|6052|108.2|243.01|224.70
+  |地球 Earth|6378|149.6|0.9973|365.26
+  |火星 Mars|3398|227.9|1.0260|686.98
+  |木星 Jupiter|71398|778.3|0.410|4332.71
+  |土星 Saturn|60330|1427.0|0.426|10759.5
+  |天王星 Uranus|25400|2882.3|0.646|30685
+  |海王星 Neptune|24600|4523.9|0.658|60190
+  |冥王星 Pluto|1500|5917.1|6.39|90800
+
+  不过，这些数据过于庞大，经过一些奇妙的处理（归一化）之后使用会更加好看。不过不管表面上的东西怎么变，核心代码始终是不变的。
+
+  ```cs
+  using System.Collections;
+  using System.Collections.Generic;
+  using UnityEngine;
+
+  public class SolarSystem : MonoBehaviour {
+
+    public Transform Sun;
+    public Transform Mercury;
+    public Transform Venus;
+    public Transform Earth;
+    public Transform Moon;
+    public Transform Mars;
+    public Transform Jupiter;
+    public Transform Saturn;
+    public Transform Uranus;
+    public Transform Neptune;
+    public Transform Pluto;
+    private float speed = 5;
+
+    // Use this for initialization
+    void Start () {
+      
+    }
+    
+    // Update is called once per frame
+    void Update () {
+      Sun.Rotate (speed * Vector3.up * 360 * Time.deltaTime / 30);
+      Mercury.Rotate (speed * Vector3.up * 360 * Time.deltaTime / 30);
+      Venus.Rotate (speed * Vector3.up * 360 * Time.deltaTime / 80);
+      Earth.Rotate (speed * Vector3.up * 360 * Time.deltaTime / 20);
+      Moon.Rotate (speed * Vector3.up * 360 * Time.deltaTime / 30);
+      Mars.Rotate (speed * Vector3.up * 360 * Time.deltaTime / 20);
+      Jupiter.Rotate (speed * Vector3.up * 360 * Time.deltaTime / 10);
+      Saturn.Rotate (speed * Vector3.up * 360 * Time.deltaTime / 10);
+      Uranus.Rotate (speed * Vector3.up * 360 * Time.deltaTime / 10);
+      Neptune.Rotate (speed * Vector3.up * 360 * Time.deltaTime / 10);
+      Pluto.Rotate (speed * Vector3.up * 360 * Time.deltaTime / 15);
+
+      Mercury.RotateAround (Sun.transform.position, Vector3.up + 0.1F * Vector3.left, speed * 360 * Time.deltaTime / 87);
+      Venus.RotateAround (Sun.transform.position, Vector3.up - 0.05F * Vector3.left, speed * 360 * Time.deltaTime / 224);
+      Earth.RotateAround (Sun.transform.position, Vector3.up + 0.13F * Vector3.left, speed * 360 * Time.deltaTime / 365);
+      Moon.RotateAround (Earth.transform.position, Vector3.up + 0.2F * Vector3.left, speed * 360 * Time.deltaTime / 30);
+      Mars.RotateAround (Sun.transform.position, Vector3.up - 0.18F * Vector3.left, speed * 360 * Time.deltaTime / 687);
+      Jupiter.RotateAround (Sun.transform.position, Vector3.up + 0.09F * Vector3.left, speed * 360 * Time.deltaTime / 1000);
+      Saturn.RotateAround (Sun.transform.position, Vector3.up - 0.21F * Vector3.left, speed * 360 * Time.deltaTime / 1300);
+      Uranus.RotateAround (Sun.transform.position, Vector3.up + 0.1F * Vector3.left, speed * 360 * Time.deltaTime / 1500);
+      Neptune.RotateAround (Sun.transform.position, Vector3.up + 0.2F * Vector3.left, speed * 360 * Time.deltaTime / 1800);
+      Pluto.RotateAround (Sun.transform.position, Vector3.up + 0.15F * Vector3.left, speed * 360 * Time.deltaTime / 2000);
+
+
+    }
+  }
+  ```

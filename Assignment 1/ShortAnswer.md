@@ -146,7 +146,7 @@
     > GameObject parentObj = GameObject.Find([ParentName]);
     > GameObject childObj = GameObject.Find([ChildName]);
     > childObj.transform.parent = parentObj.transform;
-    > 
+    >
     > ```
   - 遍历对象树
     > 如前文所属，FindObjectsOfType函数可以通过对象类型寻找对象，因而将其type令为GameObject即可得到所有的对象的一个列表，遍历列表即可遍历整个对象树
