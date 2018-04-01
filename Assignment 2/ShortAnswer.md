@@ -158,6 +158,7 @@
       Uranus.Rotate (speed * Vector3.up * 360 * Time.deltaTime / 10);
       Neptune.Rotate (speed * Vector3.up * 360 * Time.deltaTime / 10);
       Pluto.Rotate (speed * Vector3.up * 360 * Time.deltaTime / 15);
+      // 这部分指定了自转速度
 
       Mercury.RotateAround (Sun.transform.position, Vector3.up + 0.1F * Vector3.left, speed * 360 * Time.deltaTime / 87);
       Venus.RotateAround (Sun.transform.position, Vector3.up - 0.05F * Vector3.left, speed * 360 * Time.deltaTime / 224);
@@ -168,9 +169,19 @@
       Saturn.RotateAround (Sun.transform.position, Vector3.up - 0.21F * Vector3.left, speed * 360 * Time.deltaTime / 1300);
       Uranus.RotateAround (Sun.transform.position, Vector3.up + 0.1F * Vector3.left, speed * 360 * Time.deltaTime / 1500);
       Neptune.RotateAround (Sun.transform.position, Vector3.up + 0.2F * Vector3.left, speed * 360 * Time.deltaTime / 1800);
-      Pluto.RotateAround (Sun.transform.position, Vector3.up + 0.15F * Vector3.left, speed * 360 * Time.deltaTime / 2000);
-
-
+      Pluto.RotateAround (Sun.transform.position, Vector3.up + 0.15F * Vector3.left, speed * 360 * Time.deltaTime / 2000); // 这部分指定了公转轨道，因为第二个参数是法向量，因此改变该参数即可实现轨道不在同一平面内
     }
   }
   ```
+
+  值得一提的是，为了星球的运动轨迹更加容易分辨，我们推荐您使用
+
+  效果预览：
+
+  ![preview](preview1.png)
+
+  ![preview](preview2.png)
+
+  ![preview](preview4.png)
+
+  ![preview](preview3.png)
