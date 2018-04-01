@@ -247,7 +247,7 @@ public class BoatController {
 		to_or_from = 1;
 
 		from_positions = new Vector3[] { new Vector3 (0.75F, 1.2F, 0), new Vector3 (2.25F, 1.2F, 0) };
-		to_positions = new Vector3[] { new Vector3 (-0.75F, 1.2F, 0), new Vector3 (-2.25F, 1.2F, 0) };
+		to_positions = new Vector3[] { new Vector3 (-2.25F, 1.2F, 0), new Vector3 (-0.75F, 1.2F, 0) };
 
 		boat = Object.Instantiate (Resources.Load ("Perfabs/Boat", typeof(GameObject)), fromPosition, Quaternion.identity, null) as GameObject;
 		boat.name = "boat";
