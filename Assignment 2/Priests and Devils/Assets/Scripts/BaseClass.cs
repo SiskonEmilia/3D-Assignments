@@ -48,31 +48,6 @@ public class ClickGUI : MonoBehaviour {
 	}
 }
 
-public class Moveable: MonoBehaviour {
-	readonly float speed = 20;
-
-	enum movement {waiting, moving};
-	movement present;
-	Vector3 dest;
-
-	void Update() {
-		if (present == movement.moving) {
-			transform.position = Vector3.MoveTowards (transform.position, dest, speed * Time.deltaTime);
-		}
-		if (transform.position == dest)
-			present = movement.waiting;
-	}
-
-	public void setDest (Vector3 dest) {
-		this.dest = dest;
-		present = movement.moving;
-	}
-
-	public void reset() {
-		present = movement.waiting;
-	}
-}
-
 public class CoastController {
 	readonly GameObject coast;
 	readonly Vector3 from_pos = new Vector3(7,0,0);
@@ -158,8 +133,7 @@ public class CoastController {
 public class ICharacterController {
 	enum CharacterType {priest, devil};
 
-	private readonly GameObject character;
-	private readonly Moveable moveable;
+	public readonly GameObject character;
 	private readonly ClickGUI clickGUI;
 	private readonly CharacterType characterType;
 
@@ -176,7 +150,6 @@ public class ICharacterController {
 			characterType = CharacterType.devil;
 		}
 
-		moveable = character.AddComponent (typeof(Moveable)) as Moveable;
 
 		clickGUI = character.AddComponent (typeof(ClickGUI)) as ClickGUI;
 		clickGUI.setController (this);
@@ -191,8 +164,9 @@ public class ICharacterController {
 	}
 
 	public void moveTo(Vector3 dest) {
-		moveable.setDest (dest);
-	}
+		// moveable.setDest (dest);
+		throw new System.NotImplementedException ();
+	} /* This method is not supported anymore */
 
 	public int getType() {
 		return (characterType == CharacterType.priest) ? 0 : 1;
@@ -223,7 +197,7 @@ public class ICharacterController {
 	}
 
 	public void reset() {
-		moveable.reset();
+		// moveable.reset();
 		coastController = (Director.getInstance ().currentSceneController as FirstController).fromCoast;
 		getOnCoast (coastController);
 		setPosition (coastController.getEmptyPosition ());
@@ -232,10 +206,10 @@ public class ICharacterController {
 }
 
 public class BoatController {
-	readonly GameObject boat;
-	readonly Moveable moveableScript;
-	readonly Vector3 fromPosition = new Vector3 (1.5F, 0.65F, 0);
-	readonly Vector3 toPosition = new Vector3 (-1.5F, 0.65F, 0);
+	public readonly GameObject boat;
+	// readonly Moveable moveableScript;
+	readonly Vector3 fromPosition = new Vector3 (1.5F, 0.4F, 0);
+	readonly Vector3 toPosition = new Vector3 (-1.5F, 0.4F, 0);
 	readonly Vector3[] from_positions;
 	readonly Vector3[] to_positions;
 
@@ -252,19 +226,24 @@ public class BoatController {
 		boat = Object.Instantiate (Resources.Load ("Perfabs/Boat", typeof(GameObject)), fromPosition, Quaternion.identity, null) as GameObject;
 		boat.name = "boat";
 
-		moveableScript = boat.AddComponent (typeof(Moveable)) as Moveable;
+		// moveableScript = boat.AddComponent (typeof(Moveable)) as Moveable;
 		boat.AddComponent (typeof(ClickGUI));
 	}
 
 
 	public void Move() {
+		throw new System.NotImplementedException ();
 		if (to_or_from == -1) {
-			moveableScript.setDest(fromPosition);
+			// moveableScript.setDest(fromPosition);
 			to_or_from = 1;
 		} else {
-			moveableScript.setDest(toPosition);
+			// moveableScript.setDest(toPosition);
 			to_or_from = -1;
 		}
+	} /* This method is not supported anymore */
+
+	public Vector3 getDestination() {
+		return ((to_or_from *= -1) == 1) ? fromPosition : toPosition;
 	}
 
 	public int getEmptyIndex() {
@@ -336,10 +315,6 @@ public class BoatController {
 	}
 
 	public void reset() {
-		moveableScript.reset ();
-		if (to_or_from == -1) {
-			Move ();
-		}
 		passenger = new ICharacterController[2];
 	}
 }

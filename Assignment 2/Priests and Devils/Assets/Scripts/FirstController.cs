@@ -5,7 +5,7 @@ using UnityEngine;
 public class FirstController : MonoBehaviour, SceneController, UserAction {
 
 	readonly Vector3 water_pos = new Vector3(0,-0.25F,0);
-
+	private EmiliaScenceActionManager actionmanager = new EmiliaScenceActionManager ();
 
 	UserGUI userGUI;
 
@@ -23,8 +23,6 @@ public class FirstController : MonoBehaviour, SceneController, UserAction {
 	}
 
 	public void loadResources() {
-		GameObject water = Instantiate (Resources.Load ("Perfabs/Water", typeof(GameObject)), water_pos, Quaternion.identity, null) as GameObject;
-		water.name = "water";
 
 		fromCoast = new CoastController ("from");
 		toCoast = new CoastController ("to");
@@ -55,11 +53,15 @@ public class FirstController : MonoBehaviour, SceneController, UserAction {
 		}
 	}
 
+	public void Update() {
+		actionmanager.Update ();
+	}
 
 	public void moveBoat() {
 		if (boat.isEmpty ())
 			return;
-		boat.Move ();
+		// boat.Move ();
+		actionmanager.MoveBoat(boat);
 		userGUI.status = check_game_over ();
 	}
 
@@ -73,7 +75,8 @@ public class FirstController : MonoBehaviour, SceneController, UserAction {
 			}
 
 			boat.GetOffBoat (characterCtrl.getName());
-			characterCtrl.moveTo (whichCoast.getEmptyPosition ());
+			// characterCtrl.moveTo (whichCoast.getEmptyPosition ()); 
+			actionmanager.MoveCharacter(characterCtrl, whichCoast.getEmptyPosition());
 			characterCtrl.getOnCoast (whichCoast);
 			whichCoast.getOnCoast (characterCtrl);
 
@@ -88,7 +91,8 @@ public class FirstController : MonoBehaviour, SceneController, UserAction {
 				return;
 
 			whichCoast.getOffCoast(characterCtrl.getName());
-			characterCtrl.moveTo (boat.getEmptyPosition());
+			// characterCtrl.moveTo (boat.getEmptyPosition());
+			actionmanager.MoveCharacter(characterCtrl, boat.getEmptyPosition());
 			characterCtrl.getOnBoat (boat);
 			boat.GetOnBoat (characterCtrl);
 		}
@@ -130,6 +134,8 @@ public class FirstController : MonoBehaviour, SceneController, UserAction {
 	}
 
 	public void restart() {
+		if (boat.get_to_or_from() == -1)
+			actionmanager.MoveBoat(boat);
 		boat.reset ();
 		fromCoast.reset ();
 		toCoast.reset ();
