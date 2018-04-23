@@ -15,6 +15,9 @@ public class UFOFlyAction : SSAction
 	{ 
 		enable = true;
 		speed = gameobject.GetComponent<UFOData> ().speed * gameobject.GetComponent<UFOData> ().direction;
+		if (gameobject.GetComponent<Rigidbody> () != null)
+			Destroy (gameobject.GetComponent<Rigidbody> ());
+		gameobject.transform.rotation = Quaternion.identity;
 	}
 
 	public override void Update ()

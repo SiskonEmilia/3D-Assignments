@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UFOActionManager : SSActionManager , ISSActionCallback, IActionManager {
+public class PPActionManager : SSActionManager , ISSActionCallback, IActionManager {
 	FirstSceneControl scenecontroller;
-	public List<UFOFlyAction> Fly = new List<UFOFlyAction>();
+	public List<Emit> Fly = new List<Emit>();
 	public int ufonumber = 0;
 	bool type = false;
 
@@ -16,9 +16,11 @@ public class UFOActionManager : SSActionManager , ISSActionCallback, IActionMana
 		return ufonumber;
 	}
 
+
 	public void setNum (int num) {
 		ufonumber = num;
 	}
+
 
 	public SSAction GetAction() {
 		SSAction action = null;
@@ -27,7 +29,7 @@ public class UFOActionManager : SSActionManager , ISSActionCallback, IActionMana
 			action = idel [0];
 			idel.RemoveAt (0);
 		} else {
-			action = ScriptableObject.Instantiate<UFOFlyAction> (Fly [0]);
+			action = ScriptableObject.Instantiate<Emit> (Fly [0]);
 		}
 		// Try to use actions in idel list, if failed, create one
 
@@ -56,8 +58,8 @@ public class UFOActionManager : SSActionManager , ISSActionCallback, IActionMana
 
 	protected void Start() {
 		scenecontroller = Director.GetInstance ().currentSceneController as FirstSceneControl;
-		scenecontroller.actionManager = this;
-		Fly.Add (UFOFlyAction.GetSSAction ());
+		scenecontroller.actionManager2 = this;
+		Fly.Add (Emit.GetSSAction ());
 	}
 
 	public void SSActionEvent(SSAction source,  
@@ -66,7 +68,7 @@ public class UFOActionManager : SSActionManager , ISSActionCallback, IActionMana
 		string strParam = null,  
 		UnityEngine.Object objectParam = null)  
 	{  
-		if (source is UFOFlyAction)  
+		if (source is Emit)  
 		{  
 			UFOFactory uf = UFOFactory.GetInstance (); 
 			uf.FreeUFO(source.gameobject);  

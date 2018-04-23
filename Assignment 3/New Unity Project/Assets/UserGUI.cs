@@ -26,6 +26,10 @@ public class UserGUI : MonoBehaviour
 			action.setGameState(GameState.ROUND_START);  
 		}  
 
+		if (GUI.Button(new Rect(580, 100, 120, 90), "MODE SWITCH")) {
+			(action as FirstSceneControl).switchManager();
+		}
+
 		if (!isFirst && action.getGameState() == GameState.ROUND_FINISH && GUI.Button(new Rect(700, 100, 90, 90), "Next Round"))  
 		{  
 			action.setGameState(GameState.ROUND_START);  

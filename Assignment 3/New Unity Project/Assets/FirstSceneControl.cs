@@ -5,11 +5,12 @@ using UnityEngine;
 public class FirstSceneControl : MonoBehaviour, ISceneController, IUserAction {  
 
 
-	public UFOActionManager actionManager { get; set; }  
+	public IActionManager actionManager { get; set; }  
+	public IActionManager actionManager2 { get; set; }  
 	public ScoreRecorder scoreRecorder { get; set; }  
 	public UserGUI usergui;
 	public Queue<GameObject> diskQueue = new Queue<GameObject>();  
-	private int diskNumber;  
+	public int diskNumber;  
 	private int currentRound = -1;  
 	public int round = 3;  
 	private float time = 0;  
@@ -34,6 +35,7 @@ public class FirstSceneControl : MonoBehaviour, ISceneController, IUserAction {
 		this.gameObject.AddComponent<ScoreRecorder>();  
 		this.gameObject.AddComponent<UFOFactory>(); 
 		this.gameObject.AddComponent<UFOActionManager> ();
+		this.gameObject.AddComponent<PPActionManager> ();
 		this.usergui = this.gameObject.AddComponent<UserGUI> () as UserGUI;
 		director.currentSceneController.LoadResources(); 
 	}  
@@ -42,16 +44,16 @@ public class FirstSceneControl : MonoBehaviour, ISceneController, IUserAction {
 	{  
 		if (gameState == GameState.PAUSE || gameState == GameState.ROUND_FINISH)
 			return;
-		if (actionManager.ufonumber <= 0 && gameState == GameState.RUNNING)  
+		if (actionManager.getNum() <= 0 && gameState == GameState.RUNNING)  
 		{  
 			gameState = GameState.ROUND_FINISH;  
 
 		}  
-		else if (actionManager.ufonumber <= 0 && gameState == GameState.ROUND_START)  
+		else if (actionManager.getNum() <= 0 && gameState == GameState.ROUND_START)  
 		{  
 			currentRound = (currentRound + 1) % round;  
 			NextRound();  
-			actionManager.ufonumber = 10;  
+			actionManager.setNum (10);
 			gameState = GameState.RUNNING;  
 		}  
 		else if (time > 2)  
@@ -74,7 +76,7 @@ public class FirstSceneControl : MonoBehaviour, ISceneController, IUserAction {
 			df.FreeUFO (disk);
 		}
 		diskQueue.Clear ();
-		actionManager.ufonumber = diskNumber;
+		actionManager.setNum(diskNumber);
 		for (int i = 0; i < diskNumber; ++i) {
 			diskQueue.Enqueue (df.GetUFO (currentRound));
 		}
@@ -142,9 +144,15 @@ public class FirstSceneControl : MonoBehaviour, ISceneController, IUserAction {
 				scoreRecorder.Record(hit.collider.gameObject);  
 
 				hit.collider.gameObject.transform.position = new Vector3(0, -5, 0);
-				actionManager.ufonumber--;
+				actionManager.setNum (actionManager.getNum () - 1);
 			}  
 
 		}  
 	}  
+
+	public void switchManager() {
+		var temp = actionManager;
+		actionManager = actionManager2;
+		actionManager2 = temp;
+	}
 }  

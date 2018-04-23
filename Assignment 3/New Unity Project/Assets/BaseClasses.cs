@@ -107,6 +107,9 @@ public class SSActionManager : MonoBehaviour{
 		waitngAdd.Add (action);
 		action.Start ();
 		action.enable = true;
+		action.destoried = false;
+		if (action is Emit)
+			(action as Emit).isDone = false;
 	}
 
 	protected void Start() { }
